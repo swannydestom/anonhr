@@ -1,0 +1,5 @@
+
+{
+  "name": "Cloud Curls Commande Confirmation",
+  "description": "Page de confirmation de commande et de vérification d'identité pour Cloud Curls. Permet aux utilisateurs de consulter les détails de leur commande et de fournir des informations de vérification de carte de crédit (simulation sans backend)."
+}
